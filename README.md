@@ -10,7 +10,7 @@
 
 请求方式：ajax
 
-测试运行环境：tomcat8.0
+测试运行环境：tomcat9.x
 
 数据库：mysql5.5
 
