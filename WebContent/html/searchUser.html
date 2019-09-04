@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/common.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">后台管理系统</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="updateAdmin.html" >
+                   	 <img src="../img/abc.jpg" class="layui-nav-img layui-anim layui-anim-rotate"/>
+                   	 <span id="user_name"></span>
+                </a>
+            </li>
+            <li class="layui-nav-item"><a href="/SSM_CMS/signout.do">退出</a></li>
+        </ul>
+    </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test" id="leftside">
+                    <script id="side" type="text/html">
+                        {{#  layui.each(d.list, function(index, item){ }}
+                        <li class="layui-nav-item">
+                            <a href="{{item.url}}"><i class="layui-icon {{item.icon}}"></i> {{item.name}}</a>
+                        </li>
+                        {{#  }); }}
+                        {{#  if(d.list.length === 0){ }}
+                        无数据
+                        {{#  } }}
+                    </script>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body">
+            <!-- 主体区域开始 -->
+            <!--当前位置开始-->
+            <div class="layui-card layadmin-header">
+                <span class="layui-breadcrumb">
+                      <a href="/">系统</a>
+                      <a><cite>人员管理</cite></a>
+                </span>
+            </div>
+            <!--当前位置结束-->
+            <div class="layui-row">
+                <div id="system" style="height: 580px">
+                    <div class="head">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <div class="layui-input-inline" style="width: 200px;">
+                                        <input type="text" id="names" lay-verify="required" placeholder="请输入姓名" lay-verType="tips" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-radius" id="btns">
+                                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索
+                                    </button>
+                                </div>
+                            </div>
+                    </div>
+                    
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <td>序号</td>
+                                <td>姓名</td>
+                                <td>性别</td>
+                                <td>手机号</td>
+                                <td>邮箱</td>
+                                <td>头像</td>
+                                <td>状态</td>
+                                <td>操作</td>
+                            </tr>
+                        </thead>
+                        <tbody id="td">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--主体区域结束-->
+        </div>
+      <div class="layui-footer" style="text-align:center">
+        <!-- 底部固定区域 -->
+        © 版权管理
+    </div>
+    </div>
+    <script src="../js/layui.js" charset="utf-8"></script>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/urlsqit.js"></script>
+    
+    <script type="text/javascript">
+    
+    var str = "";
+    
+    $(function () {
+    	getSearch()
+	});
+    
+
+    
+   
+    
+    
+    function getSearch() {
+		$.ajax({
+			 url : "/SSM_CMS/searchPlainUser.do",
+	         type : "post",
+	         data:{
+	        	 "result" : GetQueryString("names")
+	         },
+	         success : function (m) {
+	        	 var arry = JSON.parse(m);
+	        	 console.log(arry);
+	        	 userlists(arry);
+	        	 $('#td').append(str)
+	        	del_puser()
+	         }
+		});
+		
+	} 
+    
+    function userlists(arry) {
+    	var num = 1;
+    	for(var i in arry){
+    		str +="<tr>";
+    		str +="<td>"+(num++)+"</td>";
+    		str +="<td>"+arry[i]["names"]+"</td>";
+    		str +="<td>"+arry[i]["sex"]+"</td>";
+    		str +="<td>"+arry[i]["iphone"]+"</td>";
+    		str +="<td>"+arry[i]["email"]+"</td>";
+    		str +="<td><img src='../img/abc.jpg' class='userhead'></td>";
+    		if(arry[i]["states"]=='正常'){
+    			str +="<td><span class='layui-badge layui-bg-green'>"+arry[i]["states"]+"</span></td>";
+    		}else{
+    			str +="<td><span class='layui-badge layui-bg-red'>"+arry[i]["states"]+"</span></td>";
+    		}
+    		str +="<td> <a href='users_update.html?id="+arry[i]["id"]+"' class='layui-btn layui-btn-xs'><i class='layui-icon layui-icon-edit'></i>修改</a>";
+    		str +="<a class='layui-btn layui-btn-danger layui-btn-xs delpuser' rel='"+arry[i]["id"]+"'><i class='layui-icon layui-icon-delete'></i>删除</a>";
+    	}
+    }
+    
+    function del_puser() {
+        $(".delpuser").click(function(){
+        	var ids = $(this).attr("rel");
+            layer.open({
+                icon:3,
+                content:"确认删除 ID 为："+$(this).attr("rel")+" 的信息吗？",
+                title:"确认删除",
+                btn: ['确定', '取消'],
+                yes: function(index, layero){
+            		$.ajax({
+           			 url : "/SSM_CMS/delPUser.do",
+           	         type : "post",
+           	         data:{
+           	        	 "result" : ids,
+           	         },
+           	         success : function (m) {
+           	        	 var arry = JSON.parse(m);
+           	        	 console.log(arry);
+           	        	 if(arry.state==1){
+           	        		layer.msg("删除成功",{
+           	                    icon:1,time:2000
+           	                });
+           	        		 setTimeout("location.href='users.html'",1000);
+           	        	 }else{
+           	        		 layer.msg('删除失败', {icon: 5,time: 800});
+           	        	 }
+           	         }
+           		});
+                    
+                }
+                ,btn2: function(index, layero){
+                    layer.msg("已取消",{
+                        icon:2,time:1000
+                    });
+                }
+            });
+            return false;
+        });
+    }
+    
+    $('#btns').click(function () {
+    	var names = $('#names').val();
+    	if(names.trim().length==0){
+    		location.href="users.html";
+    	}else{
+    		location.href="searchUser.html?names="+names;
+    	}
+    	
+	});
+    </script>
+</body>
+</html>

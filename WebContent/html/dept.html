@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/common.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+    
+    var cc = 0;
+    ajaxCount();
+    
+    
+	function ajaxCount() {
+		$.ajax({
+			url : "/SSM_CMS/counts_Dept.do",
+	       type : "get",
+	       success : function (m) {
+	      	  arry = JSON.parse(m);
+	      	  cc = arry["counts"];
+	      	  
+			 }
+		});
+	}
+    
+    </script>
+    
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">后台管理系统</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="updateAdmin.html" >
+                   	 <img src="../img/abc.jpg" class="layui-nav-img layui-anim layui-anim-rotate"/>
+                   	 <span id="user_name"></span>
+                </a>
+            </li>
+             <li class="layui-nav-item"><a href="/SSM_CMS/signout.do">退出</a></li>
+        </ul>
+    </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test" id="leftside">
+                    <script id="side" type="text/html">
+                        {{#  layui.each(d.list, function(index, item){ }}
+                        <li class="layui-nav-item">
+                            <a href="{{item.url}}"><i class="layui-icon {{item.icon}}"></i> {{item.name}}</a>
+                        </li>
+                        {{#  }); }}
+                        {{#  if(d.list.length === 0){ }}
+                        无数据
+                        {{#  } }}
+                    </script>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body">
+            <!-- 主体区域开始 -->
+            <!--当前位置开始-->
+            <div class="layui-card layadmin-header">
+                <span class="layui-breadcrumb">
+                      <a href="/">系统</a>
+                      <a href="/">人员管理</a>
+                      <a><cite>分组管理</cite></a>
+                </span>
+            </div>
+            <!--当前位置结束-->
+            <div class="layui-row">
+                <div id="system" style="height: 250px">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <td>序号</td>
+                                <td>部门</td>
+                                <td>部门人数</td>
+                                <td>查看部门人员</td>
+                                <td>操作</td>
+                            </tr>
+                        </thead>
+                        <tbody id="td">
+
+
+                        </tbody>
+                    </table>
+                    <div id="page" style="position: fixed; left: 230px;top:335px"></div>
+                </div>
+            </div>
+            <!--主体区域结束-->
+        </div>
+       <div class="layui-footer" style="text-align:center">
+        <!-- 底部固定区域 -->
+        © 版权管理
+    </div>
+    </div>
+    <script src="../js/layui.js" charset="utf-8"></script>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/urlsqit.js"></script>
+    
+    <script type="text/javascript">
+    
+var str = "";
+    
+    $(function () {
+    	findPage(0)
+	});
+    
+
+    
+    layui.use('laypage', function(){
+        var laypage = layui.laypage;
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+            ,count: cc //数据总数，从服务端得到
+            ,limit :3
+            ,groups :2
+            ,jump: function(obj, first){
+                if(!first){
+                	$('#td').text('');
+            		str = "";
+                	findPage((obj.curr-1)*3);
+                }
+            }
+        });
+    });
+    
+    function findPage(n) {
+    	$.ajax({
+    	    url : "/SSM_CMS/page_Depts.do",
+    	    type : "post",
+    	    data : {
+    	    	"result": n
+    	    },
+    	    success : function (s) {
+    	    	var arry = JSON.parse(s);
+    	    	console.log(arry);
+    	    	//console.log(arry[0]["lists"].length);
+    	    	deptlist(arry)
+    	    	$('#td').append(str)
+    	    	del_dpet();
+    	    }
+    	});
+    }
+    
+    
+    function deptlist(arry) {
+    	var num = 1;
+    	for(var i in arry){
+    		str +="<tr>";
+    		str +="<td>"+(num++)+"</td>";
+    		str +="<td>"+arry[i]["ename"]+"</td>";
+    		str +="<td>"+arry[i]["lists"].length+"人</td>";
+    		str +="<td><a href='dept_userslist.html?id="+arry[i]["id"]+"' class='layui-btn layui-btn-xs'><i class='layui-icon layui-icon-edit'></i>查看详情</a></td>";
+    		str +="<td> <a href='dept_update.html?id="+arry[i]["id"]+"' class='layui-btn layui-btn-xs'><i class='layui-icon layui-icon-edit'></i>修改</a>";
+    		str +="<a class='layui-btn layui-btn-danger layui-btn-xs deldept' rel='"+arry[i]["id"]+"'><i class='layui-icon layui-icon-delete'></i>删除</a></td>";
+    		
+    	}
+    }
+    
+    
+    function del_dpet() {
+        $(".deldept").click(function(){
+        	var ids = $(this).attr("rel");
+            layer.open({
+                icon:3,
+                content:"确认删除 ID 为："+$(this).attr("rel")+" 的信息吗？",
+                title:"确认删除",
+                btn: ['确定', '取消'],
+                yes: function(index, layero){
+            		$.ajax({
+           			 url : "/SSH_CMS/delDept_deptaction",
+           	         type : "post",
+           	         data:{
+           	        	 "result" : ids,
+           	         },
+           	         success : function (m) {
+           	        	 var arry = JSON.parse(m);
+           	        	 console.log(arry);
+           	        	 if(arry.state==0){
+           	        		layer.msg("该部门下有员工,删除失败!<br>请先转移员工，或者删除",{
+           	                    icon:5,time:3000
+           	                });
+           	        	 }else if(arry.state==1){
+           	        		layer.msg("删除成功",{
+           	                    icon:1,time:2000
+           	                });
+           	        		 setTimeout("location.href='dept.html'",1000);
+           	        	 }else{
+           	        		layer.msg('删除失败', {icon: 5,time: 1000});
+           	        	 }
+           	         }
+           		});
+                    
+                }
+                ,btn2: function(index, layero){
+                    layer.msg("已取消",{
+                        icon:2,time:1000
+                    });
+                }
+            });
+            return false;
+        });
+    }
+    
+    </script>
+</body>
+</html>

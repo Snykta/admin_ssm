@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/common.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">后台管理系统</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="updateAdmin.html" >
+                   	 <img src="../img/abc.jpg" class="layui-nav-img layui-anim layui-anim-rotate"/>
+                   	 <span id="user_name"></span>
+                </a>
+            </li>
+              <li class="layui-nav-item"><a href="/SSM_CMS/signout.do">退出</a></li>
+        </ul>
+    </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test" id="leftside">
+                    <script id="side" type="text/html">
+                        {{#  layui.each(d.list, function(index, item){ }}
+                        <li class="layui-nav-item">
+                            <a href="{{item.url}}"><i class="layui-icon {{item.icon}}"></i> {{item.name}}</a>
+                        </li>
+                        {{#  }); }}
+                        {{#  if(d.list.length === 0){ }}
+                        无数据
+                        {{#  } }}
+                    </script>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body">
+            <!-- 主体区域开始 -->
+            <!--当前位置开始-->
+            <div class="layui-card layadmin-header">
+                <span class="layui-breadcrumb">
+                    <a href="/">系统</a>
+                    <a href="/">人员管理</a>
+                    <a><cite>添加人员</cite></a>
+                </span>
+            </div>
+            <!--当前位置结束-->
+            <div class="layui-row">
+                <div class="layui-tab" id="system">
+                    <form class="layui-form" action="" method="post" id="system_form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="names" name=names required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+              			 <div class="layui-form-item">
+                            <label class="layui-form-label">性别</label>
+                            <div class="layui-input-inline">
+                                <select class="sexs"  name="sex" lay-filter="aihao">
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">手机号</label>
+                            <div class="layui-input-block">
+                                <input type="phone" id="iphone" name="iphone" required  lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+     						<div class="layui-form-item">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-block">
+                                <input type="email" id="email" name="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+              			 <div class="layui-form-item">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select class="states"  name="states" lay-filter="aihao">
+                                    <option value="正常">正常</option>
+                                    <option value="注销">注销</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn" lay-submit lay-filter="formDemo">修改</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--主体区域结束-->
+        </div>
+       <div class="layui-footer" style="text-align:center">
+        <!-- 底部固定区域 -->
+        © 版权管理
+    </div>
+    </div>
+    <script src="../js/layui.js" charset="utf-8"></script>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/urlsqit.js"></script>
+    
+    
+    
+    <script type="text/javascript">
+    
+    var id = GetQueryString("id");
+    $('#system_form').attr("action","/SSM_CMS/updateuser_puser.do?id="+id);
+
+	    function getList() {
+		$.ajax({
+			url : "/SSM_CMS/findidu_puser.do",
+			type : "post",
+			data : {
+				"result" : GetQueryString("id")
+			},
+			success : function (e) {
+				var arry = JSON.parse(e);
+		       	 console.log(arry);
+		       	$('#names').val(arry["names"]);
+		       	$('#iphone').val(arry["iphone"])
+		       	$('#email').val(arry["email"])
+                $('.sexs').val(arry["sex"])
+                $('.states').val(arry["states"])
+                layui.use('form',function(){
+                	var form=layui.form;
+                	form.render('select');
+                	})
+			}
+		});
+	}
+	    getList()
+    </script>
+</body>
+</html>

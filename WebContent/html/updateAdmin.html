@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/common.css">
+    <link href="../css/layer.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">后台管理系统</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="updateAdmin.html" >
+                   	 <img src="../img/abc.jpg" class="layui-nav-img layui-anim layui-anim-rotate"/>
+                   	 <span id="user_name"></span>
+                </a>
+            </li>
+           <li class="layui-nav-item"><a href="/SSM_CMS/signout.do">退出</a></li>
+        </ul>
+    </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test" id="leftside">
+                    <script id="side" type="text/html">
+                        {{#  layui.each(d.list, function(index, item){ }}
+                        <li class="layui-nav-item">
+                            <a href="{{item.url}}"><i class="layui-icon {{item.icon}}"></i> {{item.name}}</a>
+                        </li>
+                        {{#  }); }}
+                        {{#  if(d.list.length === 0){ }}
+                        无数据
+                        {{#  } }}
+                    </script>
+                </ul>
+            </div>
+        </div>
+    <div class="layui-body">
+        <!-- 主体区域开始 -->
+        <!--当前位置开始-->
+        <div class="layui-card layadmin-header">
+            <span class="layui-breadcrumb">
+                  <a href="/">系统</a>
+                  <a><cite>基本资料</cite></a>
+            </span>
+        </div>
+        <!--当前位置结束-->
+        <!--主体区域开始-->
+        <div class="layui-row layui-col-space10">
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">个人信息</div>
+                    <div class="layui-card-body">
+                        <div class="layui-row">
+                           <!--  <form action="update_AdminUserAction" method="post" class="layui-form"> -->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">账号</label>
+                                    <div class="layui-input-block">
+                                        <input style="background:rgb(242, 242, 242); " type="text" id="users" name="d" value=""  disabled="disabled" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">姓名</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="names" value="" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">邮箱</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"  id="email" value="" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" id="updateUser">立即提交</button>
+                                        <button id="CZ" type="button" class="layui-btn layui-btn-primary">重置</button>
+                                    </div>
+                                </div>
+                           <!--  </form> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">修改密码</div>
+                    <div class="layui-card-body">
+                        <div class="layui-row">
+                            <!-- <form action="" method="" class="layui-form"> -->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">原密码</label>
+                                    <div class="layui-input-block">
+                                        <input type="password" id="pass" name="pass" value="" required  lay-verify="required" placeholder="请输入原密码" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">新密码</label>
+                                    <div class="layui-input-block">
+                                        <input type="password" id="password" value="" required  lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">确认新密码</label>
+                                    <div class="layui-input-block">
+                                        <input type="password" id="repassword" value="" required  lay-verify="required" placeholder="请确认新密码" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" id="updatepass">立即提交</button>
+                                         <button id="CZ2" type="button" class="layui-btn layui-btn-primary">重置</button>
+                                    </div>
+                                </div>
+                            <!-- </form> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 个人登录记录开始 -->
+        <div class="layui-row" id="loginrecord">
+            <div class="layui-card">
+                <div class="layui-card-header">登录记录</div>
+                <div class="layui-card-body">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <td width="30px">序号</td>
+                                <td>IP</td>
+                                <td>地点</td>
+                                <td>登录时间</td>
+                                <td>结果</td>
+                            </tr>
+                        </thead>
+                        <tbody id="tb">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+<!--         个人登录记录结束
+        主体区域结束 -->
+    </div>
+<div class="layui-footer" style="text-align:center">
+       
+        © 版权管理
+    </div>
+</div>
+<script>
+
+
+var str = "";
+
+function ajaxIp() {
+	//倒序排列显示登录的IP日志
+	$.ajax({
+		url : "/SSM_CMS/selectIp.do",
+		type : "get",
+		success : function (m) {
+		 var arry = JSON.parse(m);
+       	 console.log(arry);
+       	 var num = arry.length;
+       	 for(var i =0;i<arry.length;i++){
+       		str+="<tr>"
+       		str+="<td>"+(i+1)+"</td>"
+       		str+="<td>"+arry[arry.length-1-i]["login_ip"]+"</td>"
+       		str+="<td>"+arry[arry.length-1-i]["site"]+"</td>"
+       		str+="<td>"+arry[arry.length-1-i]["dates"]+"</td>"
+       		str+="<td>"+arry[arry.length-1-i]["endlog"]+"</td>"
+       		str+="</tr>"
+       		if(i==4){
+       			break;
+       		}
+       		
+       	 }
+       	 $('#tb').append(str)
+		}
+		
+	});
+} 
+</script>
+<script src="../js/layui.js"></script>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/layer.js"></script>
+<script src="../js/update_User.js"></script>
+<script>
+
+
+$(function() {
+	ajaxIp();
+	});
+
+$('#users').val(eval("(" + $.cookie('admin_user') + ")")['users']);
+$('#names').val(eval("(" + $.cookie('admin_user') + ")")['names']);
+$('#email').val(eval("(" + $.cookie('admin_user') + ")")['email']);
+
+$('#CZ').click(function () {
+	$('#names').val("");
+	$('#email').val("");
+})
+$('#CZ2').click(function () {
+	$('#repassword').val("");
+	$('#pass').val("");
+	$('#password').val("");
+})
+</script>
+</body>
+</html>

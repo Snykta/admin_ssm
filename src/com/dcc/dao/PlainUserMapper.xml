@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcc.dao.PlainUserMapper">
+<insert id="addPlanUser" parameterType="PlainUserCostom">
+INSERT INTO p_users (NAMES,sex,iphone,email,states,dept_id) VALUES (#{names},#{sex},#{iphone},#{email},#{states},#{dept_id})
+</insert>
+
+<select id="fenyePuser" resultType="PlainUser" parameterType="int">
+  SELECT * FROM p_users LIMIT #{num}, 5;
+</select>
+
+<select id="countPuser" resultType="int">
+  SELECT count(*) FROM p_users;
+</select>
+
+<delete id="delPuser" parameterType="int">
+delete from p_users where id = #{id}
+</delete>
+
+<update id="updatePuser" parameterType="PlainUser">
+UPDATE 
+  p_users 
+SET
+  NAMES = #{names},
+  sex = #{sex},
+  iphone = #{iphone},
+  email = #{email},
+  states = #{states}
+WHERE id = #{id}
+</update>
+
+<select id="FindIdUser" parameterType="int" resultType="PlainUser">
+
+select * from p_users where id = #{id}
+</select>
+
+<select id="searchUser" parameterType="String" resultType="PlainUser">
+
+SELECT * FROM p_users WHERE names LIKE "%${names}%"
+</select>
+
+<update id="update_dept_id" parameterType="PlainUserCostom">
+UPDATE p_users SET dept_id = #{dept_id} WHERE id = #{id}
+</update>
+</mapper>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>管理系统</title>
+ <script src="./js/jquery-3.3.1.js"></script>
+    <script src="./js/register.js"></script>
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/layer.css" rel="stylesheet">
+    <script src="./js/layer.js"></script>
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">H+</h1>
+
+            </div>
+            <h3>欢迎使用</h3>
+
+            <form class="m-t" role="form">
+                <div class="form-group">
+                    <input type="text"  id="users" class="form-control" placeholder="用户名" required="">
+                </div>
+                <div class="form-group">
+                    <input type="text"  id="names" class="form-control" placeholder="姓名" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password"  id="pas" class="form-control" placeholder="密码" required="">
+                </div>
+                <div class="form-group">
+                    <input type="email"  id="email" class="form-control" placeholder="邮箱" required="">
+                </div>
+                
+                 <div>
+                   <input style="width: 120px" type="text"  id="keys" class="form-control" placeholder="验证码" required="">
+                   <img id="imgs" style="position:relative;top:-32px;left:70px" src="/SSM_CMS/getCode.do" onclick="changImg()">
+                <a href="javascript:void(0)" style="color: black;font-size: 13px;position:relative;top:-23px;left: 80px" onclick="changImg()">看不清,换一张</a>
+                </div>
+                
+                 
+                <button type="button" id="reg" class="btn btn-primary block full-width m-b">注 册</button>
+                <p class="text-muted text-center"><a href="login.html">登录账号</a>
+                </p>
+            </form>
+            
+        </div>
+    </div>
+    <script type="text/javascript">
+	function changImg() {
+	document.getElementById("imgs").src="/SSM_CMS/getCode.do?"+new Date().getTime();
+}
+</script>    
+</script>
+</body>
+</html>

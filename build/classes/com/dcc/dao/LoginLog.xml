@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcc.dao.LoginLog">
+
+<insert id="insertLog" parameterType="Login_log">
+
+INSERT INTO login_log (login_ip, site, dates, endlog) 
+VALUES
+  (#{login_ip}, #{site}, #{dates}, #{endlog})
+</insert>
+
+<select id="selectLog" resultType="Login_log">
+
+select * from login_log
+</select>
+
+</mapper>

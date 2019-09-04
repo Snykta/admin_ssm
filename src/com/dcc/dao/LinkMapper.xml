@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcc.dao.LinkMapper">
+
+<insert id="addLinkDao" parameterType="Link">
+INSERT INTO link (keyword,linkad,states,datas) VALUES (#{keyword},#{linkad},#{states},#{datas})
+</insert>
+<select id="countLink" resultType="int">
+SELECT COUNT(*) FROM link
+</select>
+
+<select id="fenyeLink" resultType="Link" parameterType="int">
+  SELECT * FROM link LIMIT #{num}, 5;
+</select>
+
+<delete id="deleteLink" parameterType="int">
+
+  DELETE FROM link WHERE id = #{id}
+</delete>
+
+<select id="findIdLink" parameterType="int" resultType="Link">
+SELECT * FROM link WHERE id = #{id}
+</select>
+
+<update id="updateLink" parameterType="Link">
+UPDATE link SET keyword =#{keyword},linkad=#{linkad},states=#{states} WHERE id = #{id}
+</update>
+</mapper>

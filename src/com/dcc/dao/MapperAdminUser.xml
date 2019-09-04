@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcc.dao.MapperAdminUser">
+
+<select id="loginAdminUser" resultType="AdminUser">
+SELECT 
+  * 
+FROM
+  admin_user 
+WHERE admin_user.users = #{users} AND admin_user.password = #{password} 
+</select>
+
+	<select id="selectFindId" parameterType="java.lang.Integer"
+		resultType="AdminUser">
+		SELECT
+		*
+		FROM
+		admin_user
+		WHERE admin_user.id = #{id}
+	</select>
+
+<update id="updateUSerMessages" parameterType="AdminUser">
+	update admin_user
+	<set>
+			<if test="names != null">
+				admin_user.names=#{names},
+			</if>
+
+			<if test="email != null">
+				admin_user.email=#{email}
+			</if>
+	</set>
+	WHERE id=#{id}
+</update>
+
+<update id="updatePassword" parameterType="AdminUser">
+UPDATE admin_user SET admin_user.password=#{password} WHERE id = #{id}
+</update>
+
+<select id="selectAdminUser" resultType="AdminUser">
+select * from admin_user
+</select>
+
+<insert id="addAdminUser" parameterType="AdminUser">
+
+INSERT INTO admin_user (users, PASSWORD, NAMES, email, dates) 
+VALUES
+  (#{users}, #{password}, #{names}, #{email}, #{dates})
+</insert>
+</mapper>

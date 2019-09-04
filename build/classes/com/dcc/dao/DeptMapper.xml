@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcc.dao.DeptMapper">
+
+<select id="selectdept" resultType="Dept">
+select * from dept
+</select>
+<insert id="adddeptDao" parameterType="Dept">
+INSERT INTO dept(ename,datas) VALUES(#{ename},#{datas})
+</insert>
+
+<select id="countDept" resultType="int">
+select count(*) from dept
+</select>
+
+<select id="find_id_Depts" resultType="Dept" parameterType="int">
+select * from dept where id = #{id}
+</select>
+
+<resultMap type="com.dcc.po.DeptCostom" id="deptMaps">
+<id column="deptid" property="id" />
+<result column="ename" property="ename" />
+	<collection property="lists"
+		ofType="com.dcc.po.PlainUserCostom">
+		<id column="id" property="id" />
+		<result column="names" property="names" />
+		<result column="sex" property="sex" />
+		<result column="iphone" property="iphone" />
+		<result column="email" property="email" />
+		<result column="states" property="states" />
+		<result column="dept_id" property="dept_id" />
+	</collection>
+</resultMap>
+
+<select id="fenyeDept" resultMap="deptMaps" parameterType="int">
+SELECT 
+  p_users.*,
+  dept.ename,
+  dept.id deptid 
+FROM
+  p_users 
+  RIGHT JOIN (SELECT * FROM dept LIMIT #{num},3) dept
+    ON dept.id = p_users.dept_id 
+</select>
+
+
+
+<select id="dept_user_findId" resultMap="deptMaps" parameterType="int">
+SELECT 
+  p_users.*,
+  dept.ename,
+  dept.id deptid 
+FROM
+  dept,
+  p_users 
+WHERE dept.id = p_users.dept_id 
+  AND dept_id = #{id}
+</select>
+
+<update id="update_Dept" parameterType="Dept">
+UPDATE dept SET ename =#{ename} WHERE id = #{id} 
+</update>
+</mapper>
